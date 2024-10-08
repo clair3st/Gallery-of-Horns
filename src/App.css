@@ -6,9 +6,34 @@ footer {
 .beast-list {
   display: flex;
   justify-content: space-evenly;
+  flex-wrap:wrap;
+}
+.beast {
+  width:250px;
 }
 
 img {
   height: 150px;
   width: 150px;
+  object-fit: contain;
+}
+
+.title-row {
+  display: flex;
+  justify-content: space-between;
+}
+.title-row div {
+  display: flex;
+  align-items: center;
+}
+
+.favorite {
+  width: 40px;
+  background: no-repeat 20px center url('./assets/heart.svg');
+  background-size: 1.1em;
+  padding:4px;
+}
+
+.favorite.active {
+  background-image: url('./assets/heart-red.svg');
 }
