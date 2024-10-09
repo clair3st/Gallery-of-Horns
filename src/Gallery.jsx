@@ -1,40 +1,30 @@
 import data from './data.json';
-
-import Favorite from "./components/heart.jsx"
-
-
-
-function HornedBeast({ _id, title, image_url, description, keyword, horns}) {
+import { useState } from 'react';
+import Favorite from "./components/Favorite.jsx"
+import SelectedBeast from "./components/SelectedBeast.jsx"
+import HornedBeast from "./components/HornedBeast.jsx"
 
 
-  return (
-    <>
-    <div className="beast">
-      <div className="title-row">
-        <h2>{title}</h2>
-        <Favorite />
-        </div>
-      <img 
-          alt={title} 
-          src={image_url}
-          title={title}
-        />
-      <p>{description}</p>
-    </div>
-    </>
-  )
-}
 
 
 function Gallery() {
+  const [active, setActive] = useState({})
+  const [showModal, setShowModal] = useState(false)
 
+  function handleClick(x) {
+    setActive(x)
+    setShowModal(!showModal)
+  }
+
+  const handleClose = () => setShowModal(false);
 
   return (
     <>
     <div className="beast-list">
+      <SelectedBeast data={active} showModal={showModal} handleClose={handleClose} />
       {
         data.map(x =>{
-          return  <HornedBeast {...x}/>
+          return  <HornedBeast value={x} onImgClick={() => handleClick(x)}/>
         })
       }
      
