@@ -1,11 +1,7 @@
 import data from './data.json';
 import { useState } from 'react';
-import Favorite from "./components/Favorite.jsx"
 import SelectedBeast from "./components/SelectedBeast.jsx"
 import HornedBeast from "./components/HornedBeast.jsx"
-
-
-
 
 function Gallery() {
   const [active, setActive] = useState({})
