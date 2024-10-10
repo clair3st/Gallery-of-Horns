@@ -18,6 +18,21 @@ img {
   object-fit: contain;
 }
 
+.modal-content {
+  text-align:center;
+}
+
+.modal-content p {
+  text-align: left;
+  margin-top: 1em;
+}
+
+.modal-content img {
+  height: 95%;
+  width: 95%;
+}
+
+
 .title-row {
   display: flex;
   justify-content: space-between;

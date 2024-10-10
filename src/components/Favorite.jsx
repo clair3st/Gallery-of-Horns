@@ -14,7 +14,6 @@ function Favorite() {
 
   return (
     <div >
- 
       <span className={"favorite " + (active ? 'active': '')} onClick={handleClick}>{fav}</span>
     </div>
   );
