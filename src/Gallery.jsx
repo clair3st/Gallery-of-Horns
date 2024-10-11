@@ -1,53 +1,63 @@
 import data from './data.json';
 import { useState } from 'react';
-import SelectedBeast from "./components/SelectedBeast.jsx"
-import HornedBeast from "./components/HornedBeast.jsx"
+import SelectedBeast from './components/SelectedBeast.jsx'
+import HornedBeast from './components/HornedBeast.jsx'
+import SearchBeast from './components/Filter.jsx'
 
 
 function Gallery() {
-  const [active, setActive] = useState({})
-  const [showModal, setShowModal] = useState(false)
+  const [active, setActive] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  let filteredData = data
+  const [filterInput, setFilterInput] = useState("");
+  const [animals, setAnimals] = useState(data);
+  const [hornList, setHornList] = useState([])
+  
+  // setHornList();
+  if (!hornList.length > 0){
+    let a = [... new Set(data.map(x => x.horns))];
+
+    setHornList(a)
+  }
 
   function handleClick(x) {
     setActive(x)
     setShowModal(!showModal)
   }
 
-  const handleClose = () => setShowModal(false);
 
-  const handleChange = (e) => {
-    e.preventDefault();
-    let s = (e.target.value).toLowerCase()
-    setSearchInput(s);
-    console.log(s)
-  };
+  const handleSearch = (e) => {
+    e.preventDefault()
 
-  if (searchInput.length > 0) {
-      filteredData = data.filter((beast) => {
-      let n = beast.title.toLowerCase()
-      let re = new RegExp(String.raw`${searchInput}`, "i");
-    console.log('searchInput', re, searchInput)
-      return n.match(re);
-    });
+    if (searchInput.length > 0 || filterInput > 0) {
+      setAnimals([...data].filter((beast) => {
+         
+        let re = searchInput.length ? new RegExp(String.raw`${searchInput}`, 'i') : '';
+        
+        if(searchInput.length && filterInput > 0){
+          return beast.title.toLowerCase().match(re) && beast.horns == filterInput;
+        } else if(searchInput.length) {
+          return beast.title.toLowerCase().match(re)
+        } else {
+          return beast.horns == filterInput
+        }
+      }))
+    }
+
+
   }
 
-  console.log(filteredData)
-
+  
   return (
     <>
     <div className="gallery">
-      <input
-       type="text"
-       placeholder="Search here"
-       onChange={handleChange}
-       value={searchInput} />
-      <SelectedBeast data={active} showModal={showModal} handleClose={handleClose} />
+
+      <SearchBeast hornList={hornList} searchInput={searchInput} setFilterInput={setFilterInput} setSearchInput={setSearchInput} handleSearch={handleSearch}/>
+      <SelectedBeast data={active} showModal={showModal} handleClose={() => setShowModal(false)} />
       <div className="beast-list">
       {
-        filteredData.map(x =>{
-          return  <HornedBeast value={x} onImgClick={() => handleClick(x)}/>
+        animals.map(x =>{
+          return  <HornedBeast key={x.key} value={x} onImgClick={() => handleClick(x)}/>
         })
       }
       </div>

@@ -17,6 +17,7 @@ function HornedBeast({value, onImgClick}) {
           onClick={onImgClick}
         />
       <p>{value.description}</p>
+      <p>horns: {value.horns}</p>
     </div>
     </>
   )
