@@ -1,6 +1,19 @@
+#root {
+  padding:1em;
+}
+
 footer {
   display: flex;
   justify-content: space-evenly;
+}
+.filter-form{
+  max-width: 500px
+}
+.filter-form * {
+  margin: 1em 0;
+}
+.filter-form button {
+  display: block;
 }
 
 .beast-list {
@@ -31,7 +44,6 @@ img {
   height: 95%;
   width: 95%;
 }
-
 
 .title-row {
   display: flex;

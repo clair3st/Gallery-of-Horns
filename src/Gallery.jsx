@@ -2,87 +2,62 @@ import data from './data.json';
 import { useState } from 'react';
 import SelectedBeast from './components/SelectedBeast.jsx'
 import HornedBeast from './components/HornedBeast.jsx'
-import Form from 'react-bootstrap/Form';
+import SearchBeast from './components/Filter.jsx'
 
 
 function Gallery() {
-  const [active, setActive] = useState({})
-  const [showModal, setShowModal] = useState(false)
+  const [active, setActive] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-  const [filterInput, setFilterInput] = useState("")
-  let filteredData = data
+  const [filterInput, setFilterInput] = useState("");
+  const [animals, setAnimals] = useState(data);
+  const [hornList, setHornList] = useState([])
+  
+  // setHornList();
+  if (!hornList.length > 0){
+    let a = [... new Set(data.map(x => x.horns))];
 
-  let hornList = [... new Set(data.map(x => x.horns))];
+    setHornList(a)
+  }
 
   function handleClick(x) {
     setActive(x)
     setShowModal(!showModal)
   }
 
-  const handleClose = () => setShowModal(false);
-
-  // const handleChange = (e) => {
-  //   e.preventDefault();
-  //   let s = (e.target.value).toLowerCase()
-  //   setSearchInput(s);
-  // };
-
-
-
-  const handleDropDown = (e) => {
-    setFilterInput(e.target.value);
-  };
 
   const handleSearch = (e) => {
-    console.log(e)
-
     e.preventDefault()
-    const query = formData.get("query");
-    const horns = formData.get('select');
-    console.log(`You searched for '${query}'`);
 
-    if (query > 0) {
-      filteredData = data.filter((beast) => {
-        let n = beast.title.toLowerCase()
-        let re = new RegExp(String.raw`${searchInput}`, "i");
-        return n.match(re);
-      })
+    if (searchInput.length > 0 || filterInput > 0) {
+      setAnimals([...data].filter((beast) => {
+         
+        let re = searchInput.length ? new RegExp(String.raw`${searchInput}`, 'i') : '';
+        
+        if(searchInput.length && filterInput > 0){
+          return beast.title.toLowerCase().match(re) && beast.horns == filterInput;
+        } else if(searchInput.length) {
+          return beast.title.toLowerCase().match(re)
+        } else {
+          return beast.horns == filterInput
+        }
+      }))
     }
 
-    if (horns > 0) {
-      filteredData = filteredData.filter((x) => {
-        return x == horns
-      })
-    }
+
   }
-
 
   
   return (
     <>
     <div className="gallery">
-      <form action={handleSearch} onSubmit={e => e.preventDefault()}>
-              <Form.Select aria-label="Default select example">
-                <option>Number of Horns</option>
-          
-            {
-              hornList.map(x => {
-                return <option key={x} value={x}>{x}</option>
-              })
-            }
-              </Form.Select>
-        <Form.Control type="text" placeholder="Search" name="query" value={searchInput} onChange={e => setSearchInput(e.target.value)} />
-        
-        
-        <button type="submit">Search</button>
-      </form>
 
-      
-      <SelectedBeast data={active} showModal={showModal} handleClose={handleClose} />
+      <SearchBeast hornList={hornList} searchInput={searchInput} setFilterInput={setFilterInput} setSearchInput={setSearchInput} handleSearch={handleSearch}/>
+      <SelectedBeast data={active} showModal={showModal} handleClose={() => setShowModal(false)} />
       <div className="beast-list">
       {
-        filteredData.map(x =>{
-          return  <HornedBeast value={x} onImgClick={() => handleClick(x)}/>
+        animals.map(x =>{
+          return  <HornedBeast key={x.key} value={x} onImgClick={() => handleClick(x)}/>
         })
       }
       </div>
